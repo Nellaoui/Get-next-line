@@ -6,22 +6,22 @@
 /*   By: nelallao <nelallao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 14:58:42 by nelallao          #+#    #+#             */
-/*   Updated: 2022/11/15 15:04:25 by nelallao         ###   ########.fr       */
+/*   Updated: 2022/11/15 21:24:17 by nelallao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int ft_strlen(char *str)
+int	ft_strlen(char *str)
 {
-	int i;
-	
+	int	i;
+
 	i = 0;
-	if(!str)
-		return 0;
-	while(str && str[i])
+	if (!str)
+		return (0);
+	while (str && str[i])
 		i++;
-	return i;
+	return (i);
 }
 char	*ft_strjoin(char *s1, char *s2)
 {
@@ -82,29 +82,54 @@ char	*ft_strdup(char *s1)
 	return (duplicate);
 }
 
-char    *give_line(char *reserve)
+char	*give_line(char *reserve)
 {
-    int i;
-    char *dest;
-    char *tmp;
+	int		i;
+	char	*tmp;
 
-    i = 0;
-    while(reserve[i] && reserve[i] != '\n')
-        i++;
-    dest = malloc(sizeof(char) * i + 2);
-    if(!dest)
-    	return NULL;
-    i = 0;
-    while(reserve[i] && reserve[i] != '\n')
-    {
-        tmp[i] = reserve[i];
-        i++;
-    }
-    if(reserve[i] == '\n')
-    {
-        tmp[i] = reserve[i];
-        i++;
-    }
+	i = 0;
+	while (reserve[i] && reserve[i] != '\n')
+		i++;
+	tmp = malloc(sizeof(char) * i + 2);
+	if (!tmp)
+		return (NULL);
+	i = 0;
+	while (reserve[i] && reserve[i] != '\n')
+	{
+		tmp[i] = reserve[i];
+		i++;
+	}
+	if (reserve[i] == '\n')
+	{
+		tmp[i] = reserve[i];
+		i++;
+	}
 	tmp[i] = '\0';
-    return (tmp);
+	return (tmp);
+}
+char	*new_reserve(char *reserve)
+{
+	char *dest;
+	int i;
+	int j;
+
+	i = 0;
+	while (reserve[i] && reserve[i] != '\n')
+		i++;
+	if (reserve[i] == '\n')
+		i++;
+	dest = malloc(sizeof(char) * ft_strlen(reserve) - i + 1);
+	if (!dest)
+		return (NULL);
+
+	j = 0;
+	while (reserve[i])
+	{
+		dest[j] = reserve[i];
+		j++;
+		i++;
+	}
+	dest[j] = '\0';
+	free(reserve);
+	return (dest);
 }
