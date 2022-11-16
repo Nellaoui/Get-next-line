@@ -6,7 +6,7 @@
 /*   By: nelallao <nelallao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 14:58:42 by nelallao          #+#    #+#             */
-/*   Updated: 2022/11/15 21:24:17 by nelallao         ###   ########.fr       */
+/*   Updated: 2022/11/16 13:17:04 by nelallao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ char	*ft_strjoin(char *s1, char *s2)
 		point[i++] = s2[j++];
 	point[i] = '\0';
 	free(s1);
-	s1 = NULL;
 	return (point);
 }
 
@@ -62,6 +61,7 @@ char	*ft_strchr(char *scanned, int searched)
 	}
 	return ((char *)scanned + i);
 }
+
 char	*ft_strdup(char *s1)
 {
 	int		size;
@@ -90,7 +90,9 @@ char	*give_line(char *reserve)
 	i = 0;
 	while (reserve[i] && reserve[i] != '\n')
 		i++;
-	tmp = malloc(sizeof(char) * i + 2);
+	if (reserve[i] == '\n')
+		i++;
+	tmp = malloc(sizeof(char) * (i + 1));
 	if (!tmp)
 		return (NULL);
 	i = 0;
@@ -101,7 +103,7 @@ char	*give_line(char *reserve)
 	}
 	if (reserve[i] == '\n')
 	{
-		tmp[i] = reserve[i];
+		tmp[i] = '\n';
 		i++;
 	}
 	tmp[i] = '\0';
@@ -109,19 +111,18 @@ char	*give_line(char *reserve)
 }
 char	*new_reserve(char *reserve)
 {
-	char *dest;
-	int i;
-	int j;
+	char	*dest;
+	int		i;
+	int		j;
 
 	i = 0;
 	while (reserve[i] && reserve[i] != '\n')
 		i++;
 	if (reserve[i] == '\n')
 		i++;
-	dest = malloc(sizeof(char) * ft_strlen(reserve) - i + 1);
+	dest = malloc(sizeof(char) * (ft_strlen(reserve) - i + 1));
 	if (!dest)
 		return (NULL);
-
 	j = 0;
 	while (reserve[i])
 	{

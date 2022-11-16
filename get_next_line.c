@@ -6,7 +6,7 @@
 /*   By: nelallao <nelallao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 14:57:35 by nelallao          #+#    #+#             */
-/*   Updated: 2022/11/15 21:36:48 by nelallao         ###   ########.fr       */
+/*   Updated: 2022/11/16 13:25:04 by nelallao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,16 @@ char	*get_next_line(int fd)
 	int			c;
 
 	c = 1;
+	buffer[0] = '\0';
+	if(fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
 	while (c != 0 && !ft_strchr(buffer, '\n'))
 	{
 		c = read(fd, buffer, BUFFER_SIZE);
 		if (c < 0)
 		{
 			free(reserve);
-			reserve = NULL;
+			return (NULL);
 		}
 		buffer[c] = '\0';
 		if (!reserve)
@@ -42,20 +45,26 @@ char	*get_next_line(int fd)
 	}
 	line = give_line(reserve);
 	reserve = new_reserve(reserve);
-	if (c == 0)
+	if (ft_strlen(line) == 0)
 	{
-		if (buffer[c] == '\0')
-			return (NULL);
+		if (reserve)
+			free(reserve);
+		free(line);
+		return (0);
 	}
 	return (line);
 }
 // int	main(void)
 // {
 // 	int fd;
-
-// 	fd = open("text.txt", O_RDWR);
+// 	fd = open("txt.txt", O_RDONLY);
+// 	if (fd < 0)
+// 		printf("Failed to open the file");
 // 	printf("%s", get_next_line(fd));
 // 	printf("%s", get_next_line(fd));
 // 	printf("%s", get_next_line(fd));
 // 	printf("%s", get_next_line(fd));
+// 	printf("%s", get_next_line(fd));
+// 	// get_next_line(fd);
+// 	// get_next_line(fd);
 // }
