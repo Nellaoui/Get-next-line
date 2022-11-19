@@ -6,7 +6,7 @@
 /*   By: nelallao <nelallao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 14:58:42 by nelallao          #+#    #+#             */
-/*   Updated: 2022/11/16 13:17:04 by nelallao         ###   ########.fr       */
+/*   Updated: 2022/11/19 20:20:55 by nelallao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	ft_strlen(char *str)
 		i++;
 	return (i);
 }
+
 char	*ft_strjoin(char *s1, char *s2)
 {
 	int		total;
@@ -87,6 +88,8 @@ char	*give_line(char *reserve)
 	int		i;
 	char	*tmp;
 
+	if (!reserve)
+		return (0);
 	i = 0;
 	while (reserve[i] && reserve[i] != '\n')
 		i++;
@@ -102,35 +105,7 @@ char	*give_line(char *reserve)
 		i++;
 	}
 	if (reserve[i] == '\n')
-	{
-		tmp[i] = '\n';
-		i++;
-	}
+		tmp[i++] = '\n';
 	tmp[i] = '\0';
 	return (tmp);
-}
-char	*new_reserve(char *reserve)
-{
-	char	*dest;
-	int		i;
-	int		j;
-
-	i = 0;
-	while (reserve[i] && reserve[i] != '\n')
-		i++;
-	if (reserve[i] == '\n')
-		i++;
-	dest = malloc(sizeof(char) * (ft_strlen(reserve) - i + 1));
-	if (!dest)
-		return (NULL);
-	j = 0;
-	while (reserve[i])
-	{
-		dest[j] = reserve[i];
-		j++;
-		i++;
-	}
-	dest[j] = '\0';
-	free(reserve);
-	return (dest);
 }

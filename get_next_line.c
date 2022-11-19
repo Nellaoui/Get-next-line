@@ -6,29 +6,47 @@
 /*   By: nelallao <nelallao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 14:57:35 by nelallao          #+#    #+#             */
-/*   Updated: 2022/11/16 13:25:04 by nelallao         ###   ########.fr       */
+/*   Updated: 2022/11/19 20:24:49 by nelallao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
-get_next_line function read a file and return the line with a newline
-newline charachter from a file descriptor.
-so whenever call get_next_line static varible is used is remember the pervious fucnction call.
-in first we cheak if it static variable is empty 
-*/
 #include "get_next_line.h"
 
-char	*get_next_line(int fd)
+char	*new_reserve(char *reserve)
 {
-	static char	*reserve;
-	char		*line;
-	char		buffer[BUFFER_SIZE + 1];
-	int			c;
+	int		i;
+	int		j;
+	char	*dest;
+
+	if (!reserve)
+		return (0);
+	i = 0;
+	while (reserve[i] && reserve[i] != '\n')
+		i++;
+	if (reserve[i] == '\n')
+		i++;
+	dest = malloc(sizeof(char) * (ft_strlen(reserve) - i + 1));
+	if (!dest)
+		return (NULL);
+	j = 0;
+	while (reserve[i])
+	{
+		dest[j] = reserve[i];
+		j++;
+		i++;
+	}
+	dest[j] = '\0';
+	free(reserve);
+	return (dest);
+}
+
+char	*get_next(char *reserve, int fd)
+{
+	char	buffer[BUFFER_SIZE + 1];
+	int		c;
 
 	c = 1;
 	buffer[0] = '\0';
-	if(fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
 	while (c != 0 && !ft_strchr(buffer, '\n'))
 	{
 		c = read(fd, buffer, BUFFER_SIZE);
@@ -43,28 +61,29 @@ char	*get_next_line(int fd)
 		else
 			reserve = ft_strjoin(reserve, buffer);
 	}
+	return (reserve);
+}
+
+char	*get_next_line(int fd)
+{
+	char	*line;
+	static char *reserve;
+
+	reserve = get_next(reserve, fd);
 	line = give_line(reserve);
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	if (!reserve)
+		return (0);
 	reserve = new_reserve(reserve);
 	if (ft_strlen(line) == 0)
 	{
 		if (reserve)
+		{
 			free(reserve);
-		free(line);
-		return (0);
+			reserve = NULL;
+			free(line);
+			return (0);
+		}
+		return (line);
 	}
-	return (line);
-}
-// int	main(void)
-// {
-// 	int fd;
-// 	fd = open("txt.txt", O_RDONLY);
-// 	if (fd < 0)
-// 		printf("Failed to open the file");
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	// get_next_line(fd);
-// 	// get_next_line(fd);
-// }
