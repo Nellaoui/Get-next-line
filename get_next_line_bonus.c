@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nelallao <nelallao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 14:57:35 by nelallao          #+#    #+#             */
-/*   Updated: 2022/11/22 20:15:57 by nelallao         ###   ########.fr       */
+/*   Updated: 2022/11/23 08:48:22 by nelallao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*new_reserve(char *reserve)
 {
@@ -67,32 +67,24 @@ char	*get_next(char *reserve, int fd)
 char	*get_next_line(int fd)
 {
 	char		*line;
-	static char	*reserve;
+	static char	*reserve[INT_MAX];
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	reserve = get_next(reserve, fd);
-	if (!reserve)
+	reserve[fd] = get_next(reserve[fd], fd);
+	if (!reserve[fd])
 		return (0);
-	line = give_line(reserve);
-	reserve = new_reserve(reserve);
+	line = give_line(reserve[fd]);
+	reserve[fd] = new_reserve(reserve[fd]);
 	if (ft_strlen(line) == 0)
 	{
-		if (reserve)
+		if (reserve[fd])
 		{
-			free(reserve);
-			reserve = NULL;
+			free(reserve[fd]);
+			reserve[fd] = NULL;
 			free(line);
 			return (0);
 		}
 	}
 	return (line);
-}
-#include <stdio.h>
-#include <fcntl.h>
-int main(void)
-{
-    
-   
-	printf("%s", get_next_line(0));
 }
