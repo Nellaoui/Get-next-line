@@ -31,7 +31,7 @@ This project consists of coding a function that returns one line at a time from 
 
 </aside>
 
-#  what we gonna use in Get Next Line ? 🧠` 
+#  what we gonna use in Get Next Line ? 
 
 ---
 
